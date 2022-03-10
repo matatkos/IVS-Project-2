@@ -19,7 +19,7 @@ PLANOVANY POSTUP
 3. 18.4. hotovy produkt
 
 
-#TO DO 
+#TODO 
 Vsetci
 -kostra, GUI
 
