@@ -14,9 +14,9 @@ TERMINY MEETINGOV(kazdy vikend)
   -Dohadovanie funkcii, rozdelenie uloh, vyber programovacieho jazyka, 
 
 PLANOVANY POSTUP
-26.3. kostra
-10.4. finished GUI
-18.4. hotovy produkt
+1. 26.3. kostra
+2. 10.4. finished GUI
+3. 18.4. hotovy produkt
 
 
 #TO DO 
