@@ -160,6 +160,3 @@ canvas.pack()
 
 canvas.mainloop()
 
-
-
-
