@@ -67,11 +67,8 @@ def send(symbol):
     if type(symbol) in (int, float):
         #if operation is nth root inverse current symbol
         if is_root:
-            tmp = float(1/symbol)
-            print(tmp)
-
-            buffer.append(tmp)
-            is_root = False
+            buffer.append(float(1/symbol)) #index of root
+            is_root = False                #we set the is_root bool back to false
 
         #pridavam do stringoveho bufferu cisla, ktore sa retazia
         else:
@@ -90,28 +87,36 @@ def send(symbol):
             #if given symbol is ^ (pow), functions prints out "^" but buffer gets "**"
             if symbol == "^":
                 buffer.append("**")
+            #if given symbol is nth root, buffer gets "**" symbol and is root is set to True so the next operand is index of root
             elif symbol == "s":
-                print("hi")
                 buffer.append("**")
                 is_root = True
             else:
                 buffer.append(symbol)
             operations_set = True
-
+        #if operation is already set, and another operation is given, the new
+        #one overwrites previous one
         elif symbol in ("+", "-", "/", "*", "^", "s") and operations_set:
             buffer[-1] = symbol
+    #at the end we write out the symbol so it displays on the screen
     write(symbol)
     return
 
-
-
-
-def clear():
-    global buffer
-    global buffer_numbers
+#function clears text box only
+def clear_tb():
     text_box.config(state="normal")
     text_box.delete('1.0', END)
     text_box.config(state='disabled')
+    return
+
+#function clears the text box and buffer
+def clear():
+    global buffer
+    global buffer_numbers
+    #clearing the text box
+    clear_tb()
+
+    #clearing the buffer
     buffer = []
     buffer_numbers=""
     return
