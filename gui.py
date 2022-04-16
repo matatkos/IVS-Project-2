@@ -56,7 +56,9 @@ def send(symbol ):
 def clear():
     global buffer
     global buffer_numbers
+    text_box.config(state="normal")
     text_box.delete('1.0', END)
+    text_box.config(state='disabled')
     buffer = []
     buffer_numbers=""
     return
