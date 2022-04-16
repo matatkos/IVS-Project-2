@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 import math
 
 window = Tk()
@@ -164,6 +165,16 @@ def clear():
     buffer_numbers=""
     return
 
+
+def show_help():
+    message='''
+    TODO add text
+    SYNTAX:
+            root: x root n -> nth root of a number x i.e. 4root2 = 2'''
+    messagebox.showinfo("help", message)
+    return
+
+
 text_box = Text(
     canvas,
     height=3,
@@ -253,8 +264,8 @@ button_equal = Button(canvas, text = "=", height = 2, width = 3,relief=FLAT,bd=2
 button_equal.grid(row = 6, column = 2)
 #button_equal.pack()
 
-button_f63 = Button(canvas, text = "f1", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1)
-button_f63.grid(row = 6, column = 3)
+button_help = Button(canvas, text = "help", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command= lambda: show_help())
+button_help.grid(row = 6, column = 3)
 
 
 text_box.grid(row = 0, column = 0, columnspan = 4)
@@ -270,4 +281,3 @@ canvas.pack()
 
 
 canvas.mainloop()
-
