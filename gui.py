@@ -25,6 +25,7 @@ class flag:
     is_sinus = False
     is_cosinus = False
     expct_operand = True
+    expct_operation = False
     operation_set = False
     comma = False
 
@@ -79,7 +80,8 @@ def factorial(n):
 
 def equal():
     global buffer
-    buffer.append(buffer_numbers)
+    buffer_numbers_store()
+    #buffer.append(buffer_numbers)
     text_box.delete('1.0', END)
     text_box.config(state="normal")
     #if buffer empty, printing out 0
@@ -106,6 +108,7 @@ def write(char):
         text_box.insert('end', buffer, "default")
         text_box.insert('end', " ", "default")
         print(buffer)
+    print(buffer)
     text_box.config(state="disabled")
     return
 ###############################################################
@@ -117,18 +120,27 @@ def is_number(symbol):
     global buffer_numbers
     global buffer
 
+    #after factorial, sinus and cosinus we expect operation or qeual
+    #so if number given - we end the function
+    if flags.expct_operation:
+        return
+
+    #FLAGS
     flags.expct_operand = False  # number has been given, operation can come
     flags.operation_set = False  # unsetting operation, cause number was given
+    flags.expct_operation = False # no more this flag xD
     buffer_numbers += str(symbol)
     return
 
 def ops(symbol):
-    #firstly we store numbers from buffer_numbers to main buffer
-    buffer_numbers_store()
-
     #in case we expect operand and operation is given, we end the function
     if flags.expct_operand:
+        print("debug1")
         return
+    # firstly we store numbers from buffer_numbers to main buffer
+    if buffer_numbers != "":
+        buffer_numbers_store()
+
     #in case 2 or more operations in a row are given, the last one overwrites the previous one
     if flags.operation_set:
         buffer[-1] = str(symbol)
@@ -139,14 +151,16 @@ def ops(symbol):
     return
 
 def othr_functions(symbol):
-    # firstly we store numbers from buffer_numbers to main buffer
-    buffer_numbers_store()
-
     #if we expect operation, we end the function
-    if flags.operation_set:
+    if flags.operation_set or flags.expct_operand:
         return
 
+    # firstly we store numbers from buffer_numbers to main buffer
+    if buffer_numbers != "":
+        buffer_numbers_store()
+
     #SWITCH
+    flags.expct_operation = True #setting the operation flag
     #sinus
     if symbol == "sin":
         #if goniometric function was already given, nothing happens
@@ -177,12 +191,14 @@ def othr_functions(symbol):
 def buffer_numbers_store():
     global buffer_numbers
     global buffer
-    buffer.append(int(buffer_numbers))
-    buffer_numbers = ""
+    if buffer_numbers != "":
+        buffer.append(int(buffer_numbers))
+        buffer_numbers = ""
     return
 
 
 def send(symbol):
+    #SWITCH
     #given symbol is a number(operand)
     if type(symbol) in (int, float):
         is_number(symbol)
@@ -195,6 +211,7 @@ def send(symbol):
         ops(symbol)
     elif symbol in other_functions:
         othr_functions(symbol)
+
 
 
     write(symbol)
