@@ -1,4 +1,6 @@
 from tkinter import *
+import math
+
 window = Tk()
 window.title("The Compact Calculator")
 #window.geometry("200x150")
@@ -8,14 +10,30 @@ canvas = Canvas(width = 361, height = 100)
 buffer_numbers = ""
 buffer = []
 index = 0
-operation_plus_minus = False
+operations_set = False
+
+def calculate():
+    expression = ""
+    for i in range(len(buffer)):
+        expression += str(buffer[i])
+    result = eval(expression)
+    return result
+
 
 def equal():
+    global buffer
     buffer.append(buffer_numbers)
     text_box.delete('1.0', END)
     text_box.config(state="normal")
-    text_box.insert('end', buffer,"default")
+    if buffer[0] == "":
+        text_box.delete('1.0', END)
+        text_box.insert('end', "0", "default")
+    else:
+        #tu bude pisat vysledok
+        text_box.delete('1.0', END)
+        #text_box.insert('end', buffer,"default")
     text_box.config(state='disabled')
+    write(calculate())
     return
 
 def write(char):
@@ -29,23 +47,25 @@ def send(symbol ):
     global buffer_numbers
     global buffer
     global index
-    global operation_plus_minus
+    global operations_set
 
     if type(symbol) in (int, float):
+        #ked pride cislo po operacii, bool sa bastavi na False
+        operations_set = False
         #pridavam do stringoveho bufferu cisla, ktore sa retazia
         buffer_numbers += str(symbol)
     else:
         #akonahle dostaneme nieco ine ako cislo, predchadzajuce cisla
         #sa premenia na int a ulozia do bufferu
-        buffer.append(int(buffer_numbers))
+        if buffer_numbers != "":
+            buffer.append(int(buffer_numbers))
 
         buffer_numbers = "" #strinogvy buffer sa resetuje
 
-
-        if symbol in ("+", "-") and not(operation_plus_minus):
-            operation_plus_minus = True
+        if symbol in ("+", "-", "/", "*") and not(operations_set):
+            operations_set = True
             buffer.append(symbol)
-        elif symbol in ("+", "-") and operation_plus_minus:
+        elif symbol in ("+", "-", "/", "*") and operations_set:
             buffer[-1] = symbol
     write(symbol)
     return
@@ -96,7 +116,7 @@ button_power.grid(row = 2, column = 1)
 button_factorial = Button(canvas, text = "x!", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command= lambda: send(str("!")))
 button_factorial.grid(row = 2, column = 2)
 
-button_division = Button(canvas, text = "/", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1)
+button_division = Button(canvas, text = "/", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1,  command= lambda: send(str("/")))
 button_division.grid(row = 2, column = 3)
 
 #row 3
