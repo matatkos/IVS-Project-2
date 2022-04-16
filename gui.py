@@ -11,6 +11,7 @@ buffer_numbers = ""
 buffer = []
 index = 0
 operations_set = False
+is_root = False
 
 
 #function calculates the result of an expression stored in buffer
@@ -42,7 +43,9 @@ def equal():
     text_box.delete('1.0', END)
     text_box.config(state='disabled')
     #pritns out result
+    print(buffer)
     write(calculate())
+
     return
 
 def write(char):
@@ -59,12 +62,22 @@ def send(symbol):
     global buffer
     global index
     global operations_set
+    global is_root
 
     if type(symbol) in (int, float):
-        #ked pride cislo po operacii, bool sa bastavi na False
-        operations_set = False
+        #if operation is nth root inverse current symbol
+        if is_root:
+            tmp = float(1/symbol)
+            print(tmp)
+
+            buffer.append(tmp)
+            is_root = False
+
         #pridavam do stringoveho bufferu cisla, ktore sa retazia
-        buffer_numbers += str(symbol)
+        else:
+            buffer_numbers += str(symbol)
+        # ked pride cislo po operacii, bool sa bastavi na False
+        operations_set = False
     else:
         #akonahle dostaneme nieco ine ako cislo, predchadzajuce cisla
         #sa premenia na int a ulozia do bufferu
@@ -73,15 +86,19 @@ def send(symbol):
 
         buffer_numbers = "" #strinogvy buffer sa resetuje
 
-        if symbol in ("+", "-", "/", "*", "^") and not(operations_set):
+        if symbol in ("+", "-", "/", "*", "^", "s") and not(operations_set):
             #if given symbol is ^ (pow), functions prints out "^" but buffer gets "**"
             if symbol == "^":
                 buffer.append("**")
+            elif symbol == "s":
+                print("hi")
+                buffer.append("**")
+                is_root = True
             else:
                 buffer.append(symbol)
             operations_set = True
 
-        elif symbol in ("+", "-", "/", "*", "^") and operations_set:
+        elif symbol in ("+", "-", "/", "*", "^", "s") and operations_set:
             buffer[-1] = symbol
     write(symbol)
     return
@@ -178,7 +195,7 @@ button_plus = Button(canvas, text = "+", height = 2, width = 3,relief=FLAT,bd=2,
 button_plus.grid(row = 5, column = 3)
 
 #row 6
-button_comma = Button(canvas, text = ",", height = 2, width= 3,relief=FLAT, bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1)
+button_comma = Button(canvas, text = ",", height = 2, width= 3,relief=FLAT, bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1, command= lambda: send(str(".")))
 button_comma.grid(row = 6, column = 0)
 
 button_0 = Button(canvas, text = "0", height = 2, width = 3,relief=FLAT,bd=2,activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1, command=lambda: send(int(0)))
