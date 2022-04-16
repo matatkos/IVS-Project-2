@@ -12,11 +12,19 @@ buffer = []
 index = 0
 operations_set = False
 
+
+#function calculates the result of an expression stored in buffer
 def calculate():
+    global buffer
+    global buffer_numbers
     expression = ""
     for i in range(len(buffer)):
         expression += str(buffer[i])
-    result = eval(expression)
+    result = round(eval(expression) , 6) #rounding to 6 decimal digits
+    buffer_numbers = ""
+    buffer.clear()
+
+    buffer.append(result)
     return result
 
 
@@ -25,14 +33,15 @@ def equal():
     buffer.append(buffer_numbers)
     text_box.delete('1.0', END)
     text_box.config(state="normal")
+    #if buffer empty, printing out 0
     if buffer[0] == "":
-        text_box.delete('1.0', END)
-        text_box.insert('end', "0", "default")
-    else:
-        #tu bude pisat vysledok
-        text_box.delete('1.0', END)
-        #text_box.insert('end', buffer,"default")
+        text_box.delete('1.0', END) #deletes previous zero
+        write(0)
+        return
+    #deletes content of text box
+    text_box.delete('1.0', END)
     text_box.config(state='disabled')
+    #pritns out result
     write(calculate())
     return
 
@@ -43,7 +52,9 @@ def write(char):
     return
 
 
-def send(symbol ):
+def send(symbol):
+    #setting variables to global
+    #so function can overwrite them
     global buffer_numbers
     global buffer
     global index
@@ -62,10 +73,15 @@ def send(symbol ):
 
         buffer_numbers = "" #strinogvy buffer sa resetuje
 
-        if symbol in ("+", "-", "/", "*") and not(operations_set):
+        if symbol in ("+", "-", "/", "*", "^") and not(operations_set):
+            #if given symbol is ^ (pow), functions prints out "^" but buffer gets "**"
+            if symbol == "^":
+                buffer.append("**")
+            else:
+                buffer.append(symbol)
             operations_set = True
-            buffer.append(symbol)
-        elif symbol in ("+", "-", "/", "*") and operations_set:
+
+        elif symbol in ("+", "-", "/", "*", "^") and operations_set:
             buffer[-1] = symbol
     write(symbol)
     return
@@ -107,10 +123,10 @@ button_clear.grid(row = 1, column = 3)
 
 #row 2
 #todo change
-button_root = Button(canvas, text = "root", height = 2, width= 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1)
+button_root = Button(canvas, text = "root", height = 2, width= 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command=lambda: send(str("s")))
 button_root.grid(row = 2, column = 0)
 #todo decide what should be displayed
-button_power = Button(canvas, text = "^", height = 2, width = 3, relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1,command=lambda: send(str("^")))
+button_power = Button(canvas, text = "^", height = 2, width = 3, relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command=lambda: send(str("^")))
 button_power.grid(row = 2, column = 1)
 
 button_factorial = Button(canvas, text = "x!", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command= lambda: send(str("!")))
