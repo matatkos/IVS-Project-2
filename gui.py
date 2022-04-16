@@ -16,6 +16,40 @@ is_sinus = False
 is_cosinus = False
 expect_operand = True
 
+ops_cancel = ["+", "-", "/", "*", "^", "s"]
+other_functions = ["sin", "cos", "!"]
+
+class flag:
+    is_root = False
+    is_sinus = False
+    is_cosinus = False
+    expct_operand = True
+    operation_set = False
+    comma = False
+
+#creating flags object
+flags = flag()
+
+#function clears text box only
+def clear_tb():
+    text_box.config(state="normal")
+    text_box.delete('1.0', END)
+    text_box.config(state='disabled')
+    return
+
+#function clears the text box and buffer
+def clear():
+    global buffer
+    global buffer_numbers
+    #clearing the text box
+    clear_tb()
+
+    #clearing the buffer
+    buffer = []
+    buffer_numbers=""
+    return
+
+
 #function calculates the result of an expression stored in buffer
 def calculate():
     global buffer
@@ -63,10 +97,109 @@ def equal():
 def write(char):
     text_box.config(state="normal")
     text_box.insert('end', char, "default")
+    # text_box.insert('end', " ", "default")
+    if char in ops_cancel and flags.operation_set:
+        print("helo")
+        clear_tb()
+        text_box.config(state="normal")
+        text_box.insert('end', buffer, "default")
+        text_box.insert('end', " ", "default")
+        print(buffer)
     text_box.config(state="disabled")
+    return
+###############################################################
+
+
+
+
+def is_number(symbol):
+    global buffer_numbers
+    global buffer
+
+    flags.expct_operand = False  # number has been given, operation can come
+    flags.operation_set = False  # unsetting operation, cause number was given
+    buffer_numbers += str(symbol)
+    return
+
+def ops(symbol):
+    #firstly we store numbers from buffer_numbers to main buffer
+    buffer_numbers_store()
+
+    #in case we expect operand and operation is given, we end the function
+    if flags.expct_operand:
+        return
+    #in case 2 or more operations in a row are given, the last one overwrites the previous one
+    if flags.operation_set:
+        buffer[-1] = str(symbol)
+        return
+    flags.operation_set = True  # setting the ops flag
+    #buffer_numbers_store() #numbers in string buffer are stored in main buffer
+    buffer.append(str(symbol)) #operation is stored in buffer
+    return
+
+def othr_functions(symbol):
+    # firstly we store numbers from buffer_numbers to main buffer
+    buffer_numbers_store()
+
+    #if we expect operation, we end the function
+    if flags.operation_set:
+        return
+
+    #SWITCH
+    #sinus
+    if symbol == "sin":
+        #if goniometric function was already given, nothing happens
+        if flags.is_sinus or flags.is_cosinus:
+            return
+        flags.is_sinus = True
+        buffer[-1] = math.sin(math.radians(buffer[-1]))
+
+    #cosinus
+    elif symbol == "cos":
+        # if goniometric function was already given, nothing happens
+        if flags.is_sinus or flags.is_cosinus:
+            return
+        flags.is_cosinus = True
+        buffer[-1] = math.cos(math.radians(buffer[-1]))
+
+
+    #factorial
+    elif symbol == "!":
+        buffer[-1] = factorial(int(buffer[-1]))
+
     return
 
 
+
+
+
+def buffer_numbers_store():
+    global buffer_numbers
+    global buffer
+    buffer.append(int(buffer_numbers))
+    buffer_numbers = ""
+    return
+
+
+def send(symbol):
+    #given symbol is a number(operand)
+    if type(symbol) in (int, float):
+        is_number(symbol)
+        #print(buffer) #debug print
+
+
+    #given symbol is from ops_canel
+    elif symbol in ops_cancel:
+        #print(buffer) #debug print
+        ops(symbol)
+    elif symbol in other_functions:
+        othr_functions(symbol)
+
+
+    write(symbol)
+    return
+
+'''  
 def send(symbol):
     #setting variables to global
     #so function can overwrite them
@@ -144,25 +277,8 @@ def send(symbol):
     #at the end we write out the symbol so it displays on the screen
     write(symbol)
     return
+'''
 
-#function clears text box only
-def clear_tb():
-    text_box.config(state="normal")
-    text_box.delete('1.0', END)
-    text_box.config(state='disabled')
-    return
-
-#function clears the text box and buffer
-def clear():
-    global buffer
-    global buffer_numbers
-    #clearing the text box
-    clear_tb()
-
-    #clearing the buffer
-    buffer = []
-    buffer_numbers=""
-    return
 
 text_box = Text(
     canvas,
