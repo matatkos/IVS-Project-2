@@ -25,9 +25,13 @@ def calculate():
     buffer_numbers = ""
     buffer.clear()
 
+    #if result has only zeros after comma, function returns integer
+    if ((result*10)%10) == 0:
+        buffer.append(int(result))
+        return int(result)
+    #if it contains decimals we return it as it is
     buffer.append(result)
     return result
-
 
 def equal():
     global buffer
@@ -45,7 +49,6 @@ def equal():
     #pritns out result
     print(buffer)
     write(calculate())
-
     return
 
 def write(char):
