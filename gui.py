@@ -12,7 +12,9 @@ buffer = []
 index = 0
 operations_set = False
 is_root = False
-
+is_sinus = False
+is_cosinus = False
+expect_operand = True
 
 #function calculates the result of an expression stored in buffer
 def calculate():
@@ -32,6 +34,13 @@ def calculate():
     #if it contains decimals we return it as it is
     buffer.append(result)
     return result
+
+def factorial(n):
+    fact = 1
+    for i in range(1, n + 1):
+        fact = fact * i
+    print(fact)
+    return fact
 
 def equal():
     global buffer
@@ -66,8 +75,14 @@ def send(symbol):
     global index
     global operations_set
     global is_root
+    global is_sinus
+    global is_cosinus
+    global expect_operand
 
     if type(symbol) in (int, float):
+        expect_operand = False
+        is_sinus = False
+        is_cosinus = False
         #if operation is nth root inverse current symbol
         if is_root:
             buffer.append(float(1/symbol)) #index of root
@@ -79,14 +94,20 @@ def send(symbol):
         # ked pride cislo po operacii, bool sa bastavi na False
         operations_set = False
     else:
+        if expect_operand:
+            return
         #akonahle dostaneme nieco ine ako cislo, predchadzajuce cisla
         #sa premenia na int a ulozia do bufferu
         if buffer_numbers != "":
+            is_sinus = False
+            is_cosinus = False
             buffer.append(int(buffer_numbers))
 
         buffer_numbers = "" #strinogvy buffer sa resetuje
 
         if symbol in ("+", "-", "/", "*", "^", "s") and not(operations_set):
+            is_sinus = False
+            is_cosinus = False
             #if given symbol is ^ (pow), functions prints out "^" but buffer gets "**"
             if symbol == "^":
                 buffer.append("**")
@@ -100,7 +121,26 @@ def send(symbol):
         #if operation is already set, and another operation is given, the new
         #one overwrites previous one
         elif symbol in ("+", "-", "/", "*", "^", "s") and operations_set:
+            is_sinus = False
+            is_cosinus = False
             buffer[-1] = symbol
+        #operations that dont cancel eachother out:
+        elif symbol == "!":
+            is_sinus = False
+            is_cosinus = False
+            buffer[-1] = factorial(buffer[-1])
+        elif symbol == "sin":
+            if is_sinus or is_cosinus:
+                return
+            is_sinus = True
+            buffer[-1] = math.sin(math.radians(buffer[-1]))
+        elif symbol == "cos":
+            if is_sinus or is_cosinus:
+                return
+            is_cosinus = True
+            buffer[-1] = math.cos(math.radians(buffer[-1]))
+
+
     #at the end we write out the symbol so it displays on the screen
     write(symbol)
     return
@@ -134,11 +174,11 @@ text_box.tag_config('default',background='#DDDBDB', foreground="#000000")
 text_box.config(state='disabled')
 
 #row 1
-button_f10 = Button(canvas, text = "f0", height = 2, width= 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1)
-button_f10.grid(row = 1, column = 0)
+button_sin = Button(canvas, text = "sin", height = 2, width= 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command = lambda: send(str("sin")))
+button_sin.grid(row = 1, column = 0)
 
-button_f11 = Button(canvas, text = "f1", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1)
-button_f11.grid(row = 1, column = 1)
+button_cos = Button(canvas, text = "cos", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command = lambda: send(str("cos")))
+button_cos.grid(row = 1, column = 1)
 
 button_f12 = Button(canvas, text = "f2", height = 2, width = 3, relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1)
 button_f12.grid(row = 1, column = 2)
