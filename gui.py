@@ -15,8 +15,6 @@ is_root = False
 is_sinus = False
 is_cosinus = False
 expect_operand = True
-comma = False
-comma_cnt = 0
 
 #function calculates the result of an expression stored in buffer
 def calculate():
@@ -58,21 +56,13 @@ def equal():
     text_box.delete('1.0', END)
     text_box.config(state='disabled')
     #pritns out result
+    print(buffer)
     write(calculate())
     return
 
 def write(char):
     text_box.config(state="normal")
     text_box.insert('end', char, "default")
-    #text_box.insert('end', " ", "default")
-
-    if char in ("+", "-", "/", "*", "^", "s") and operations_set:
-        print("helo")
-        clear_tb()
-        text_box.config(state="normal")
-        text_box.insert('end', buffer, "default")
-        text_box.insert('end', " ", "default")
-        print(buffer)
     text_box.config(state="disabled")
     return
 
@@ -88,8 +78,6 @@ def send(symbol):
     global is_sinus
     global is_cosinus
     global expect_operand
-    global comma
-    global comma_cnt
 
     if type(symbol) in (int, float):
         expect_operand = False
@@ -104,8 +92,7 @@ def send(symbol):
         else:
             buffer_numbers += str(symbol)
         # ked pride cislo po operacii, bool sa bastavi na False
-        if not(comma):
-            operations_set = False
+        operations_set = False
     else:
         if expect_operand:
             return
@@ -118,12 +105,9 @@ def send(symbol):
 
         buffer_numbers = "" #strinogvy buffer sa resetuje
 
-        if symbol in ("+", "-", "/", "*", "^", "s", ".") and not(operations_set):
-            print("first operation")
+        if symbol in ("+", "-", "/", "*", "^", "s") and not(operations_set):
             is_sinus = False
             is_cosinus = False
-            if symbol == ".":
-                comma = True
             #if given symbol is ^ (pow), functions prints out "^" but buffer gets "**"
             if symbol == "^":
                 buffer.append("**")
@@ -136,32 +120,25 @@ def send(symbol):
             operations_set = True
         #if operation is already set, and another operation is given, the new
         #one overwrites previous one
-        elif symbol in ("+", "-", "/", "*", "^", "s", ".") and operations_set:
-            print("second operation")
+        elif symbol in ("+", "-", "/", "*", "^", "s") and operations_set:
             is_sinus = False
             is_cosinus = False
-            if symbol == ".":
-                return
             buffer[-1] = symbol
         #operations that dont cancel eachother out:
         elif symbol == "!":
             is_sinus = False
             is_cosinus = False
-            comma = False
             buffer[-1] = factorial(buffer[-1])
         elif symbol == "sin":
-            comma = False
             if is_sinus or is_cosinus:
                 return
             is_sinus = True
             buffer[-1] = math.sin(math.radians(buffer[-1]))
         elif symbol == "cos":
-            comma = False
             if is_sinus or is_cosinus:
                 return
             is_cosinus = True
             buffer[-1] = math.cos(math.radians(buffer[-1]))
-
 
 
     #at the end we write out the symbol so it displays on the screen
