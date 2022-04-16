@@ -183,7 +183,8 @@ text_box = Text(
     canvas,
     height=3,
     width=27,
-    background='#DDDBDB'
+    background='#DDDBDB',
+    relief=FLAT
 )
 text_box.tag_config('default',background='#DDDBDB', foreground="#000000")
 text_box.config(state='disabled')
