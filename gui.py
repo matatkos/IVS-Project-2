@@ -167,11 +167,15 @@ def clear():
 
 
 def show_help():
+    top = Toplevel(canvas)
+    top.geometry("750x250")
+    top.title("HELP")
     message='''
-    TODO add text
     SYNTAX:
-            root: x root n -> nth root of a number x i.e. 4root2 = 2'''
-    messagebox.showinfo("help", message)
+        ROOT: x root n -> nth root of a number x i.e. 4 root 2 = 2'''
+    text = Text(top, height=50, width=250)
+    text.grid(row=0, column=0)
+    text.insert('1.0', message)
     return
 
 
