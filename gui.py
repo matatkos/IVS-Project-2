@@ -32,6 +32,15 @@ class flag:
 #creating flags object
 flags = flag()
 
+def buffer_numbers_store():
+    global buffer_numbers
+    global buffer
+    if buffer_numbers != "":
+        buffer.append(int(buffer_numbers))
+        buffer_numbers = ""
+    return
+
+
 #function clears text box only
 def clear_tb():
     text_box.config(state="normal")
@@ -56,6 +65,7 @@ def clear():
 def calculate():
     global buffer
     global buffer_numbers
+    #buffer_numbers_store()
     expression = ""
     for i in range(len(buffer)):
         expression += str(buffer[i])
@@ -67,6 +77,7 @@ def calculate():
     if ((result*10)%10) == 0:
         buffer.append(int(result))
         return int(result)
+
     #if it contains decimals we return it as it is
     buffer.append(result)
     return result
@@ -75,27 +86,8 @@ def factorial(n):
     fact = 1
     for i in range(1, n + 1):
         fact = fact * i
-    print(fact)
     return fact
 
-def equal():
-    global buffer
-    buffer_numbers_store()
-    #buffer.append(buffer_numbers)
-    text_box.delete('1.0', END)
-    text_box.config(state="normal")
-    #if buffer empty, printing out 0
-    if buffer[0] == "":
-        text_box.delete('1.0', END) #deletes previous zero
-        write(0)
-        return
-    #deletes content of text box
-    text_box.delete('1.0', END)
-    text_box.config(state='disabled')
-    #pritns out result
-    print(buffer)
-    write(calculate())
-    return
 
 def write(char):
     text_box.config(state="normal")
@@ -108,9 +100,37 @@ def write(char):
         text_box.insert('end', buffer, "default")
         text_box.insert('end', " ", "default")
         print(buffer)
-    print(buffer)
+    #DEBUG PRINTS
+    print("buffer:", buffer)
+    print("buffer_numbers:", buffer_numbers)
     text_box.config(state="disabled")
     return
+
+def equal():
+    global buffer
+    global buffer_numbers
+    buffer_numbers_store()
+    #DEBUGS PRINT
+    print("buffer:",buffer)
+    print("buffer_numbers:",buffer_numbers)
+    #buffer.append("")
+    #buffer.append(buffer_numbers)
+    text_box.delete('1.0', END)
+    text_box.config(state="normal")
+    #if buffer empty, printing out 0
+    if len(buffer) == 0:
+        text_box.delete('1.0', END) #deletes previous zero
+        write(0)
+        return
+    #deletes content of text box
+    text_box.delete('1.0', END)
+    text_box.config(state='disabled')
+    #pritns out result
+    #print(buffer)
+    write(calculate())
+    return
+
+
 ###############################################################
 
 
@@ -129,10 +149,15 @@ def is_number(symbol):
     flags.expct_operand = False  # number has been given, operation can come
     flags.operation_set = False  # unsetting operation, cause number was given
     flags.expct_operation = False # no more this flag xD
+    flags.is_sinus = False
+    flags.is_cosinus = False
     buffer_numbers += str(symbol)
     return
 
 def ops(symbol):
+    #FLAGS
+    #operation was given so we are no longer expecting operation
+    flags.expct_operation = False
     #in case we expect operand and operation is given, we end the function
     if flags.expct_operand:
         print("debug1")
@@ -145,7 +170,8 @@ def ops(symbol):
     if flags.operation_set:
         buffer[-1] = str(symbol)
         return
-    flags.operation_set = True  # setting the ops flag
+    #FLAGS
+    flags.operation_set = True
     #buffer_numbers_store() #numbers in string buffer are stored in main buffer
     buffer.append(str(symbol)) #operation is stored in buffer
     return
@@ -182,18 +208,6 @@ def othr_functions(symbol):
     elif symbol == "!":
         buffer[-1] = factorial(int(buffer[-1]))
 
-    return
-
-
-
-
-
-def buffer_numbers_store():
-    global buffer_numbers
-    global buffer
-    if buffer_numbers != "":
-        buffer.append(int(buffer_numbers))
-        buffer_numbers = ""
     return
 
 
