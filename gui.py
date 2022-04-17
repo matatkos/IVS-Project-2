@@ -2,6 +2,15 @@ from tkinter import *
 from tkinter import messagebox
 import math
 
+#TODO
+#BUGS TO FIX:
+#vymaz vulgarne komenty
+#eval nevi robit s napr. "064" treba fixnut situacie ked je na zaciatku nula
+#napr. : 5-5 = 3= (tie veci musis postlacat, v takomto poradi)
+#FEATURES TO ADD:
+#f2, neg?
+
+
 window = Tk()
 window.title("The Compact Calculator")
 #window.geometry("200x150")
@@ -17,7 +26,7 @@ is_sinus = False
 is_cosinus = False
 expect_operand = True
 
-ops_cancel = ["+", "-", "/", "*", "^", "s"]
+ops_cancel = ["+", "-", "/", "*", "^", "s"]#, "."]
 other_functions = ["sin", "cos", "!"]
 
 class flag:
@@ -107,19 +116,24 @@ def factorial(n):
 
 #functi
 def write(char):
+    print(flags.comma)
     text_box.config(state="normal")
+    if char == ".":
+        return
     text_box.insert('end', char, "default")
-    # text_box.insert('end', " ", "default")
-    if char in ops_cancel and flags.operation_set:
+    if char in ops_cancel:
         print("helo")
         clear_tb()
         text_box.config(state="normal")
         text_box.insert('end', buffer, "default")
         text_box.insert('end', " ", "default")
         print(buffer)
+    #text_box.insert('end', char, "default")
+
     #DEBUG PRINTS
     print("buffer:", buffer)
     print("buffer_numbers:", buffer_numbers)
+
     text_box.config(state="disabled")
     return
 
@@ -133,6 +147,11 @@ def equal():
 
     #storing buffer_numbers into main buffer
     buffer_numbers_store()
+
+    #in case of rooot, we add inversed last number
+    if flags.is_root:
+        buffer[-1] = (float(1 / buffer[-1]))  # index of root
+        flags.is_root = False
 
     #DEBUGS PRINT
     print("buffer:",buffer)
@@ -160,8 +179,26 @@ def equal():
 
 ###############################################################
 
+def comma():
+    global buffer_numbers
+    global buffer
+    if flags.expct_operand or flags.operation_set:
+        return
+    if flags.comma:
+        print("zdravim ta brasko")
+        return
+    buffer_numbers_store()
+    buffer.append(".")
+    #special print lebo kokotinaa TODO
+    clear_tb()
 
+    text_box.config(state="normal")
+    text_box.insert('end', buffer, "default")
+    text_box.config(state="disabled")
 
+    flags.expct_operand = True
+    flags.comma = True
+    return
 
 def is_number(symbol):
     global buffer_numbers
@@ -172,12 +209,14 @@ def is_number(symbol):
     if flags.expct_operation:
         return
 
+
     #FLAGS
     flags.expct_operand = False  # number has been given, operation can come
     flags.operation_set = False  # unsetting operation, cause number was given
     flags.expct_operation = False # no more this flag xD
     flags.is_sinus = False
     flags.is_cosinus = False
+
     buffer_numbers += str(symbol)
     return
 
@@ -185,13 +224,19 @@ def ops(symbol):
     #FLAGS
     #operation was given so we are no longer expecting operation
     flags.expct_operation = False
+    flags.comma = False
     #in case we expect operand and operation is given, we end the function
-    if flags.expct_operand:
+    if flags.expct_operand or flags.comma:
         print("debug1")
         return
     # firstly we store numbers from buffer_numbers to main buffer
     if buffer_numbers != "":
         buffer_numbers_store()
+
+    # in case of rooot, we add inversed last number
+    if flags.is_root:
+        buffer[-1] = (float(1 / buffer[-1]))  # index of root
+        flags.is_root = False
 
     #changing style of power
     if symbol == "^":
@@ -212,6 +257,9 @@ def ops(symbol):
     buffer.append(str(symbol)) #operation is stored in buffer
     return
 
+#nic
+
+
 def othr_functions(symbol):
     #if we expect operation, we end the function
     if flags.operation_set or flags.expct_operand:
@@ -220,6 +268,11 @@ def othr_functions(symbol):
     # firstly we store numbers from buffer_numbers to main buffer
     if buffer_numbers != "":
         buffer_numbers_store()
+
+    #in case of rooot, we add inversed last number
+    if flags.is_root:
+        buffer[-1] = (float(1 / buffer[-1]))  # index of root
+        flags.is_root = False
 
     #SWITCH
     flags.expct_operation = True #setting the operation flag
@@ -261,6 +314,12 @@ def send(symbol):
         ops(symbol)
     elif symbol in other_functions:
         othr_functions(symbol)
+
+    #given symbol is comma
+    elif symbol == ".":
+        print("send, comma")
+        comma()
+
 
 
 
