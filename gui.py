@@ -32,6 +32,18 @@ class flag:
 #creating flags object
 flags = flag()
 
+#function resets all flags
+def reset_flags():
+    flags.is_root = False
+    flags.is_sinus = False
+    flags.is_cosinus = False
+    flags.expct_operand = True
+    flags.expct_operation = False
+    flags.operation_set = False
+    flags.comma = False
+    return
+
+
 def buffer_numbers_store():
     global buffer_numbers
     global buffer
@@ -58,7 +70,11 @@ def clear():
     #clearing the buffer
     buffer = []
     buffer_numbers=""
+
+    #FLAGS
+    reset_flags()
     return
+
 
 
 #function calculates the result of an expression stored in buffer
@@ -82,13 +98,14 @@ def calculate():
     buffer.append(result)
     return result
 
+#factorial function
 def factorial(n):
     fact = 1
     for i in range(1, n + 1):
         fact = fact * i
     return fact
 
-
+#functi
 def write(char):
     text_box.config(state="normal")
     text_box.insert('end', char, "default")
@@ -109,12 +126,18 @@ def write(char):
 def equal():
     global buffer
     global buffer_numbers
+
+    #is operation is set, equal() cannot happen
+    if flags.operation_set:
+        return
+
+    #storing buffer_numbers into main buffer
     buffer_numbers_store()
+
     #DEBUGS PRINT
     print("buffer:",buffer)
     print("buffer_numbers:",buffer_numbers)
-    #buffer.append("")
-    #buffer.append(buffer_numbers)
+
     text_box.delete('1.0', END)
     text_box.config(state="normal")
     #if buffer empty, printing out 0
@@ -127,6 +150,10 @@ def equal():
     text_box.config(state='disabled')
     #pritns out result
     #print(buffer)
+
+    #FLAGS
+    reset_flags()
+    flags.expct_operand = False #so we dint expect operand
     write(calculate())
     return
 
@@ -165,6 +192,15 @@ def ops(symbol):
     # firstly we store numbers from buffer_numbers to main buffer
     if buffer_numbers != "":
         buffer_numbers_store()
+
+    #changing style of power
+    if symbol == "^":
+        symbol = "**"
+
+    #nth root:
+    if symbol == "s":
+        symbol = "**"
+        flags.is_root = True
 
     #in case 2 or more operations in a row are given, the last one overwrites the previous one
     if flags.operation_set:
@@ -337,86 +373,86 @@ text_box.tag_config('default',background='#DDDBDB', foreground="#000000")
 text_box.config(state='disabled')
 
 #row 1
-button_sin = Button(canvas, text = "sin", height = 2, width= 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command = lambda: send(str("sin")))
+button_sin = Button(canvas, text = "sin", height = 2, width= 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2, command = lambda: send(str("sin")))
 button_sin.grid(row = 1, column = 0)
 
-button_cos = Button(canvas, text = "cos", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command = lambda: send(str("cos")))
+button_cos = Button(canvas, text = "cos", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2, command = lambda: send(str("cos")))
 button_cos.grid(row = 1, column = 1)
 
-button_f12 = Button(canvas, text = "f2", height = 2, width = 3, relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1)
+button_f12 = Button(canvas, text = "f2", height = 2, width = 3, relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2)
 button_f12.grid(row = 1, column = 2)
 
-button_clear = Button(canvas, text = "C", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command = lambda: clear())
+button_clear = Button(canvas, text = "C", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2, command = lambda: clear())
 button_clear.grid(row = 1, column = 3)
 
 #row 2
 #todo change
-button_root = Button(canvas, text = "root", height = 2, width= 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command=lambda: send(str("s")))
+button_root = Button(canvas, text = "root", height = 2, width= 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2, command=lambda: send(str("s")))
 button_root.grid(row = 2, column = 0)
 #todo decide what should be displayed
-button_power = Button(canvas, text = "^", height = 2, width = 3, relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command=lambda: send(str("^")))
+button_power = Button(canvas, text = "^", height = 2, width = 3, relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2, command=lambda: send(str("^")))
 button_power.grid(row = 2, column = 1)
 
-button_factorial = Button(canvas, text = "x!", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command= lambda: send(str("!")))
+button_factorial = Button(canvas, text = "x!", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2, command= lambda: send(str("!")))
 button_factorial.grid(row = 2, column = 2)
 
-button_division = Button(canvas, text = "/", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1,  command= lambda: send(str("/")))
+button_division = Button(canvas, text = "/", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2,  command= lambda: send(str("/")))
 button_division.grid(row = 2, column = 3)
 
 #row 3
 
-button_7 = Button(canvas, text = "7", height = 2, width= 3, relief=FLAT,bd=2,activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1, command=lambda: send(int(7)))
+button_7 = Button(canvas, text = "7", height = 2, width= 3, relief=FLAT,bd=2,activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=2, command=lambda: send(int(7)))
 button_7.grid(row = 3, column = 0)
 
-button_8 = Button(canvas, text = "8", height = 2, width = 3, relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1, command=lambda: send(int(8)))
+button_8 = Button(canvas, text = "8", height = 2, width = 3, relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=2, command=lambda: send(int(8)))
 button_8.grid(row = 3, column = 1)
 
-button_9 = Button(canvas, text = "9", height = 2, width = 3, relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1, command=lambda: send(int(9)))
+button_9 = Button(canvas, text = "9", height = 2, width = 3, relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=2, command=lambda: send(int(9)))
 button_9.grid(row = 3, column = 2)
 
-button_mul = Button(canvas, text = "*", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1,command = lambda: send(str("*")))
+button_mul = Button(canvas, text = "*", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2,command = lambda: send(str("*")))
 button_mul.grid(row = 3, column = 3)
 
 #row 4
-button_4 = Button(canvas, text = "4", height = 2, width= 3 ,relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1,command = lambda: send(int(4)))
+button_4 = Button(canvas, text = "4", height = 2, width= 3 ,relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=2,command = lambda: send(int(4)))
 button_4.grid(row = 4, column = 0)
 #button_1f.pack()
 
-button_5 = Button(canvas, text = "5", height = 2, width = 3 ,relief=FLAT,bd=2,activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1, command=lambda: send(int(5)))
+button_5 = Button(canvas, text = "5", height = 2, width = 3 ,relief=FLAT,bd=2,activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=2, command=lambda: send(int(5)))
 button_5.grid(row = 4, column = 1)
 #button_2f.pack()
 
-button_6 = Button(canvas, text = "6", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1, command=lambda: send(int(6)))
+button_6 = Button(canvas, text = "6", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=2, command=lambda: send(int(6)))
 button_6.grid(row = 4, column = 2)
 
-button_minus = Button(canvas, text = "-", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command= lambda: send(str("-")))
+button_minus = Button(canvas, text = "-", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2, command= lambda: send(str("-")))
 button_minus.grid(row = 4, column = 3)
 
 #row 5
-button_1 = Button(canvas, text = "1", height = 2, width= 3,relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1, command=lambda: send(int(1)))
+button_1 = Button(canvas, text = "1", height = 2, width= 3,relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=2, command=lambda: send(int(1)))
 button_1.grid(row = 5, column = 0)
 
-button_2 = Button(canvas, text = "2", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1, command=lambda: send(int(2)))
+button_2 = Button(canvas, text = "2", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=2, command=lambda: send(int(2)))
 button_2.grid(row = 5, column = 1)
 
-button_3 = Button(canvas, text = "3", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1, command=lambda: send(int(3)))
+button_3 = Button(canvas, text = "3", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=2, command=lambda: send(int(3)))
 button_3.grid(row = 5, column = 2)
 
-button_plus = Button(canvas, text = "+", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command= lambda: send(str("+")))
+button_plus = Button(canvas, text = "+", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2, command= lambda: send(str("+")))
 button_plus.grid(row = 5, column = 3)
 
 #row 6
-button_comma = Button(canvas, text = ",", height = 2, width= 3,relief=FLAT, bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1, command= lambda: send(str(".")))
+button_comma = Button(canvas, text = ",", height = 2, width= 3,relief=FLAT, bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=2, command= lambda: send(str(".")))
 button_comma.grid(row = 6, column = 0)
 
-button_0 = Button(canvas, text = "0", height = 2, width = 3,relief=FLAT,bd=2,activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1, command=lambda: send(int(0)))
+button_0 = Button(canvas, text = "0", height = 2, width = 3,relief=FLAT,bd=2,activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=2, command=lambda: send(int(0)))
 button_0.grid(row = 6, column = 1)
 
-button_equal = Button(canvas, text = "=", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=1,command = lambda: equal())
+button_equal = Button(canvas, text = "=", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#ffa31a',activeforeground="#292929", fg='#ffa31a', bg='#292929',highlightbackground="#292929", highlightthickness=2,command = lambda: equal())
 button_equal.grid(row = 6, column = 2)
 #button_equal.pack()
 
-button_help = Button(canvas, text = "help", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=1, command= lambda: show_help())
+button_help = Button(canvas, text = "help", height = 2, width = 3,relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2, command= lambda: show_help())
 button_help.grid(row = 6, column = 3)
 
 
