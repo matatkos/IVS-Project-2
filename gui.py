@@ -1,9 +1,11 @@
 from tkinter import *
 from tkinter import messagebox
+import mathlib
 import math
 
 #TODO
 #BUGS TO FIX:
+#delenie nulou
 #vymaz vulgarne komenty
 #eval nevi robit s napr. "064" treba fixnut situacie ked je na zaciatku nula
 #napr. : 5-5 = 3= (tie veci musis postlacat, v takomto poradi)
@@ -107,14 +109,9 @@ def calculate():
     buffer.append(result)
     return result
 
-#factorial function
-def factorial(n):
-    fact = 1
-    for i in range(1, n + 1):
-        fact = fact * i
-    return fact
 
-#functi
+
+#writing on text box
 def write(char):
     print(flags.comma)
     text_box.config(state="normal")
@@ -209,7 +206,6 @@ def is_number(symbol):
     if flags.expct_operation:
         return
 
-
     #FLAGS
     flags.expct_operand = False  # number has been given, operation can come
     flags.operation_set = False  # unsetting operation, cause number was given
@@ -257,9 +253,6 @@ def ops(symbol):
     buffer.append(str(symbol)) #operation is stored in buffer
     return
 
-#nic
-
-
 def othr_functions(symbol):
     #if we expect operation, we end the function
     if flags.operation_set or flags.expct_operand:
@@ -295,7 +288,7 @@ def othr_functions(symbol):
 
     #factorial
     elif symbol == "!":
-        buffer[-1] = factorial(int(buffer[-1]))
+        buffer[-1] = mathlib.factorial(int(buffer[-1]))
 
     return
 
