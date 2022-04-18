@@ -1,4 +1,6 @@
 # IVS-Project-2
+DEVELOPMENT TEAM: xsnope04, xspace39, xbuchm02, xjokay00
+
 
 DEADLINES
 1. part  17.3. = plán
