@@ -29,7 +29,12 @@ expect_operand = True
 ops_cancel = ["+", "-", "/", "*", "^", "s"]#, "."]
 other_functions = ["sin", "cos", "!"]
 
+    ##
+    # @brief class for flags signaling what operation was sent
+    #
+
 class flag:
+
     is_root = False
     is_sinus = False
     is_cosinus = False
@@ -38,10 +43,16 @@ class flag:
     operation_set = False
     comma = False
 
-#creating flags object
+    ##
+    # @brief creating flags object
+    #
+
 flags = flag()
 
-#function resets all flags
+    ##
+    # @brief function that resets all flags
+    #
+
 def reset_flags():
     flags.is_root = False
     flags.is_sinus = False
@@ -52,6 +63,12 @@ def reset_flags():
     flags.comma = False
     return
 
+    ##
+    # @brief function that appends buffer_numbers to buffer
+    #
+    # function takes numbers stored in buffer_numbers, appends them to the main buffer where we calculate with them
+    # and resets buffer number
+    #
 
 def buffer_numbers_store():
     global buffer_numbers
@@ -61,15 +78,21 @@ def buffer_numbers_store():
         buffer_numbers = ""
     return
 
+    ##
+    # @brief function clears the text box only
+    #
 
-#function clears text box only
 def clear_tb():
     text_box.config(state="normal")
     text_box.delete('1.0', END)
     text_box.config(state='disabled')
     return
 
-#function clears the text box and buffer
+
+    ##
+    # @brief function clears the text box and the buffer
+    #
+
 def clear():
     global buffer
     global buffer_numbers
@@ -80,13 +103,17 @@ def clear():
     buffer = []
     buffer_numbers=""
 
-    #FLAGS
+    #resets flags
     reset_flags()
     return
 
+    ##
+    # @brief function calculates the result of an expression stored in buffer
+    #
+    # we store the whole mathematical operation in the buffer,
+    # when equal comes to the buffer we calculate the expression
+    #
 
-
-#function calculates the result of an expression stored in buffer
 def calculate():
     global buffer
     global buffer_numbers
@@ -94,27 +121,38 @@ def calculate():
     expression = ""
     for i in range(len(buffer)):
         expression += str(buffer[i])
-    result = round(eval(expression) , 6) #rounding to 6 decimal digits
+    result = round(eval(expression) , 6)    #rounding to 6 decimal digits
     buffer_numbers = ""
     buffer.clear()
 
-    #if result has only zeros after comma, function returns integer
+    #if the result has only zeros after comma, function returns an integer
     if ((result*10)%10) == 0:
         buffer.append(int(result))
         return int(result)
 
-    #if it contains decimals we return it as it is
+    #if it contains decimals, return it as it is
     buffer.append(result)
     return result
 
-#factorial function
+    ##
+    # @brief function calculates the n-th factorial
+    #
+    # @param n - the number of which we to calculate logarithm
+    # @return fact - the factorial of n
+    #
+
 def factorial(n):
     fact = 1
     for i in range(1, n + 1):
         fact = fact * i
     return fact
 
-#functi
+    ##
+    # @brief function displays given char on the textbox
+    #
+    # @param char - the character we want to display
+    #
+
 def write(char):
     print(flags.comma)
     text_box.config(state="normal")
@@ -128,14 +166,18 @@ def write(char):
         text_box.insert('end', buffer, "default")
         text_box.insert('end', " ", "default")
         print(buffer)
-    #text_box.insert('end', char, "default")
 
-    #DEBUG PRINTS
+    #DEBUG PRINT
     print("buffer:", buffer)
     print("buffer_numbers:", buffer_numbers)
 
     text_box.config(state="disabled")
     return
+
+    ##
+    # @brief ends the mathematical expression and calls calculate
+    #
+
 
 def equal():
     global buffer
@@ -148,36 +190,36 @@ def equal():
     #storing buffer_numbers into main buffer
     buffer_numbers_store()
 
-    #in case of rooot, we add inversed last number
+    #in case of root, we invert and add the last number
     if flags.is_root:
         buffer[-1] = (float(1 / buffer[-1]))  # index of root
         flags.is_root = False
 
-    #DEBUGS PRINT
+    #DEBUG PRINT
     print("buffer:",buffer)
     print("buffer_numbers:",buffer_numbers)
 
     text_box.delete('1.0', END)
     text_box.config(state="normal")
-    #if buffer empty, printing out 0
+    #if buffer is empty, prints out 0
     if len(buffer) == 0:
-        text_box.delete('1.0', END) #deletes previous zero
+        text_box.delete('1.0', END)     #deletes previous zero
         write(0)
         return
-    #deletes content of text box
+
+    #deletes the content of text box
     text_box.delete('1.0', END)
     text_box.config(state='disabled')
-    #pritns out result
-    #print(buffer)
 
-    #FLAGS
+    #sets flags
     reset_flags()
-    flags.expct_operand = False #so we dint expect operand
+    flags.expct_operand = False     #we did not expect operand
     write(calculate())
     return
 
-
-###############################################################
+    ##
+    # @brief function appends and displays comma
+    #
 
 def comma():
     global buffer_numbers
@@ -189,7 +231,7 @@ def comma():
         return
     buffer_numbers_store()
     buffer.append(".")
-    #special print lebo kokotinaa TODO
+    #special print (TODO)
     clear_tb()
 
     text_box.config(state="normal")
@@ -200,49 +242,66 @@ def comma():
     flags.comma = True
     return
 
+    ##
+    # @brief sets flags and appends symbol
+    #
+    # after factorial, sinus and cosinus we expect operation or equal
+    # so if number given we end the function
+    #
+    # @param symbol - the symbol we check and append
+    #
+
 def is_number(symbol):
     global buffer_numbers
     global buffer
 
-    #after factorial, sinus and cosinus we expect operation or qeual
-    #so if number given - we end the function
     if flags.expct_operation:
         return
 
-
-    #FLAGS
-    flags.expct_operand = False  # number has been given, operation can come
-    flags.operation_set = False  # unsetting operation, cause number was given
-    flags.expct_operation = False # no more this flag xD
+    #sets flags
+    flags.expct_operand = False     # number has been given, operation can come
+    flags.operation_set = False     # setting operation to false because number was given
+    flags.expct_operation = False   # we do not expect operation anymore
     flags.is_sinus = False
     flags.is_cosinus = False
 
     buffer_numbers += str(symbol)
     return
 
+    ##
+    # @brief takes care of operations and their flags
+    #
+    # sets flags if and operation comes
+    # stores buffer and changes how certain operations look
+    # takes care of root
+    #
+    # @param symbol - the symbol we check and work with
+    #
+
+
 def ops(symbol):
-    #FLAGS
-    #operation was given so we are no longer expecting operation
-    flags.expct_operation = False
+    #setting flags
+    flags.expct_operation = False   #operation was given so we are no longer expecting operation
     flags.comma = False
     #in case we expect operand and operation is given, we end the function
     if flags.expct_operand or flags.comma:
+        #DEBUG PRINT
         print("debug1")
         return
-    # firstly we store numbers from buffer_numbers to main buffer
+    #we store numbers from buffer_numbers to main buffer
     if buffer_numbers != "":
         buffer_numbers_store()
 
-    # in case of rooot, we add inversed last number
+    #in case of root, we invert and add the last number
     if flags.is_root:
-        buffer[-1] = (float(1 / buffer[-1]))  # index of root
+        buffer[-1] = (float(1 / buffer[-1]))  #index of the root
         flags.is_root = False
 
-    #changing style of power
+    #changing how power looks
     if symbol == "^":
         symbol = "**"
 
-    #nth root:
+    #changing how root looks
     if symbol == "s":
         symbol = "**"
         flags.is_root = True
@@ -251,14 +310,22 @@ def ops(symbol):
     if flags.operation_set:
         buffer[-1] = str(symbol)
         return
-    #FLAGS
+    #sets flags
     flags.operation_set = True
-    #buffer_numbers_store() #numbers in string buffer are stored in main buffer
-    buffer.append(str(symbol)) #operation is stored in buffer
+    #buffer_numbers_store()         #numbers in string buffer are stored in main buffer
+    buffer.append(str(symbol))      #operation is stored in buffer
     return
 
-#nic
-
+    ##
+    # @brief takes care of special operations and their flags
+    #
+    # root, sin, cos, factorial
+    # sets flags if and special operation comes
+    # stores buffer and changes how certain operations look
+    # takes care of root
+    #
+    # @param symbol - the symbol we check and work with
+    #
 
 def othr_functions(symbol):
     #if we expect operation, we end the function
@@ -269,13 +336,13 @@ def othr_functions(symbol):
     if buffer_numbers != "":
         buffer_numbers_store()
 
-    #in case of rooot, we add inversed last number
+    #in case of root, we invert and add the last number
     if flags.is_root:
-        buffer[-1] = (float(1 / buffer[-1]))  # index of root
+        buffer[-1] = (float(1 / buffer[-1]))  #index of root
         flags.is_root = False
 
     #SWITCH
-    flags.expct_operation = True #setting the operation flag
+    flags.expct_operation = True    #setting the operation flag
     #sinus
     if symbol == "sin":
         #if goniometric function was already given, nothing happens
@@ -286,7 +353,7 @@ def othr_functions(symbol):
 
     #cosinus
     elif symbol == "cos":
-        # if goniometric function was already given, nothing happens
+        #if goniometric function was already given, nothing happens
         if flags.is_sinus or flags.is_cosinus:
             return
         flags.is_cosinus = True
@@ -299,6 +366,11 @@ def othr_functions(symbol):
 
     return
 
+    ##
+    # @brief sends symbol to textbox and buffer
+    #
+    # @param symbol - the symbol which we want to send to the buffer
+    #
 
 def send(symbol):
     #SWITCH
@@ -308,7 +380,7 @@ def send(symbol):
         #print(buffer) #debug print
 
 
-    #given symbol is from ops_canel
+    #given symbol belongs to ops_cancel
     elif symbol in ops_cancel:
         #print(buffer) #debug print
         ops(symbol)
@@ -319,9 +391,6 @@ def send(symbol):
     elif symbol == ".":
         print("send, comma")
         comma()
-
-
-
 
     write(symbol)
     return
@@ -407,6 +476,9 @@ def send(symbol):
 '''
 
 
+    ##
+    # @brief displays help
+    #
 
 def show_help():
     top = Toplevel(canvas)
@@ -420,10 +492,13 @@ def show_help():
     text.insert('1.0', message)
     return
 
+    ##
+    # @brief creating the gui
+    #
 
 text_box = Text(
     canvas,
-    height=3,
+    he  ight=3,
     width=27,
     background='#DDDBDB',
     relief=FLAT
@@ -517,14 +592,6 @@ button_help.grid(row = 6, column = 3)
 
 text_box.grid(row = 0, column = 0, columnspan = 4)
 
-
-
-
-
-
-
-
 canvas.pack()
-
 
 canvas.mainloop()
