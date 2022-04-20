@@ -1,6 +1,24 @@
 # IVS-Project-2
 DEVELOPMENT TEAM: xsnope04, xspace39, xbuchm02, xjokay00
 
+TOOD:
+POZRET ZADANIE VSETCI - nech nevzniknu zbytocne straty bodov.. 
+
+makefile - Jano
+bugs - David
+tests - Matushu 
+doc - Marek
+profiling - Vsetci
+licencia - Vsetci
+zosumarizovat repo - Vsetci
+mockup - 
+textaky - vsetci
+
+
+DEADLINE(above):
+24.4.2022 (NEDELA) - meeting, cas sa upresni 
+
+
 
 DEADLINES
 1. part  17.3. = plán
