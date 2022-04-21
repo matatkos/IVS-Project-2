@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 from tkinter import messagebox
 import mathlib
 import math
@@ -6,6 +7,7 @@ import math
 #TODO
 #BUGS TO FIX:
 #delenie nulou
+#nefunguje nula za desatinnou ciarkou (tazoba)
 #vymaz vulgarne komenty
 #eval nevi robit s napr. "064" treba fixnut situacie ked je na zaciatku nula
 #napr. : 5-5 = 3= (tie veci musis postlacat, v takomto poradi)
@@ -510,9 +512,28 @@ button_help.grid(row = 6, column = 3)
 
 text_box.grid(row = 0, column = 0, columnspan = 4)
 
+#KEYBOARD CONTROL
+#numbers:
+window.bind('0', lambda event:send(0))
+window.bind('1', lambda event:send(1))
+window.bind('2', lambda event:send(2))
+window.bind('3', lambda event:send(3))
+window.bind('4', lambda event:send(4))
+window.bind('5', lambda event:send(5))
+window.bind('6', lambda event:send(6))
+window.bind('7', lambda event:send(7))
+window.bind('8', lambda event:send(8))
+window.bind('9', lambda event:send(9))
 
+#operations:
+window.bind('+', lambda event:send(str("+")))
+window.bind('-', lambda event:send(str("-")))
+window.bind('*', lambda event:send(str("*")))
+window.bind('/', lambda event:send(str("/")))
 
-
+#equal
+window.bind('<Return>', lambda event:equal())
+window.bind('=', lambda event:equal())
 
 
 
