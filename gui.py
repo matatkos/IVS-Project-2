@@ -137,8 +137,8 @@ def calculate():
     ##
     # @brief function calculates the n-th factorial
     #
-    # @param n - the number of which we to calculate logarithm
-    # @return fact - the factorial of n
+    # @param n the number of which we to calculate logarithm
+    # @return fact the factorial of n
     #
 
 def factorial(n):
@@ -150,7 +150,7 @@ def factorial(n):
     ##
     # @brief function displays given char on the textbox
     #
-    # @param char - the character we want to display
+    # @param char the character we want to display
     #
 
 def write(char):
@@ -248,7 +248,7 @@ def comma():
     # after factorial, sinus and cosinus we expect operation or equal
     # so if number given we end the function
     #
-    # @param symbol - the symbol we check and append
+    # @param symbol the symbol we check and append
     #
 
 def is_number(symbol):
@@ -275,7 +275,7 @@ def is_number(symbol):
     # stores buffer and changes how certain operations look
     # takes care of root
     #
-    # @param symbol - the symbol we check and work with
+    # @param symbol the symbol we check and work with
     #
 
 
@@ -324,7 +324,7 @@ def ops(symbol):
     # stores buffer and changes how certain operations look
     # takes care of root
     #
-    # @param symbol - the symbol we check and work with
+    # @param symbol the symbol we check and work with
     #
 
 def othr_functions(symbol):
@@ -369,7 +369,7 @@ def othr_functions(symbol):
     ##
     # @brief sends symbol to textbox and buffer
     #
-    # @param symbol - the symbol which we want to send to the buffer
+    # @param symbol the symbol which we want to send to the buffer
     #
 
 def send(symbol):
