@@ -16,7 +16,6 @@ installer:
 
 
 delete:
-	#source ~/calculator/venv/bin/deactivate
 	rm -rf ~/calculator
 
 run:
