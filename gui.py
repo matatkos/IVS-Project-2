@@ -10,7 +10,6 @@ import math
 #FEATURES TO ADD:
 #f2, neg?
 
-
 window = Tk()
 window.title("The Compact Calculator")
 #window.geometry("200x150")
