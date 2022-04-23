@@ -41,6 +41,7 @@ class flag:
     expct_operation = False
     operation_set = False
     comma = False
+    division = False
 
 #creating flags object
 flags = flag()
@@ -54,6 +55,7 @@ def reset_flags():
     flags.expct_operation = False
     flags.operation_set = False
     flags.comma = False
+    flags.division = False
     return
 
 
@@ -144,6 +146,16 @@ def equal():
     if flags.operation_set:
         return
 
+    buffer_numbers_store()
+    #todo
+    if flags.division:
+        print(buffer)
+        if buffer[-1] == 0:
+            buffer = []
+            reset_flags()
+            clear_tb()
+            return
+
     #storing buffer_numbers into main buffer
     buffer_numbers_store()
 
@@ -208,6 +220,17 @@ def is_number(symbol):
     if flags.expct_operation:
         return
 
+
+    '''
+    #if we try to divide by zero:
+    if flags.division:
+        if symbol == 0 :
+            buffer = []
+            clear_tb()
+            reset_flags()
+            return
+            #print("cant divide by zero")
+    '''
     #FLAGS
     flags.expct_operand = False  # number has been given, operation can come
     flags.operation_set = False  # unsetting operation, cause number was given
@@ -219,7 +242,6 @@ def is_number(symbol):
     return
 
 def ops(symbol):
-    #FLAGS
     #operation was given so we are no longer expecting operation
     flags.expct_operation = False
     flags.comma = False
@@ -245,6 +267,13 @@ def ops(symbol):
         symbol = "**"
         flags.is_root = True
 
+    # when we divide, we must make sure that we do not divide be zero
+    #TODO
+    if symbol == "/":
+        flags.division = True
+    else:
+        flags.division = False
+
     #in case 2 or more operations in a row are given, the last one overwrites the previous one
     if flags.operation_set:
         buffer[-1] = str(symbol)
@@ -263,6 +292,7 @@ def othr_functions(symbol):
     # firstly we store numbers from buffer_numbers to main buffer
     if buffer_numbers != "":
         buffer_numbers_store()
+
 
     #in case of rooot, we add inversed last number
     if flags.is_root:
@@ -297,6 +327,13 @@ def othr_functions(symbol):
 
 def send(symbol):
     #SWITCH
+    buffer_numbers_store()
+    #TODO
+    if flags.division:
+        if buffer[-1] == 0:
+            reset_flags()
+            clear_tb()
+            return
     #given symbol is a number(operand)
     if type(symbol) in (int, float):
         is_number(symbol)
