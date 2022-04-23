@@ -1,9 +1,15 @@
 import math
 #matematicka kniznica
 
+#error message when division by zero occures
 error_message_1 = "ERROR - division by zero"
+
+#error message when root of negative number with even number
 error_message_root = "ERROR - root laws were not obeyed"
+
+#error message for using factorial function on negative or decimal number
 error_message_fact = "ERROR - factorial laws were not obeyed"
+
 #factorial function
 def factorial(n):
     fact = 1
