@@ -2,10 +2,15 @@ import math
 #matematicka kniznica
 
 error_message_1 = "ERROR - division by zero"
-
+error_message_root = "ERROR - root laws were not obeyed"
+error_message_fact = "ERROR - factorial laws were not obeyed"
 #factorial function
 def factorial(n):
     fact = 1
+    if n< 0:
+        return error_message_fact
+    if n % 1 > 0:
+        return error_message_fact
     for i in range(1, n + 1):
         fact = fact * i
     return fact
@@ -38,6 +43,9 @@ def div(op1,op2):
 
 #power
 def pow(op1,op2):
+    if op1 <0:
+        if not isinstance(op2, int):
+            return error_message_root
     return op1**op2
 
 #root
@@ -49,10 +57,13 @@ def root(op1,op2):
         if op1 >=0:
             return op1 ** (1 / op2)
         else:
-            return
+            return error_message_root
     else:
-        return op1 ** (1 / op2)
-
+        if op1 < 0:
+            op1 = abs(op1)
+            return -abs(op1 ** (1 / op2))
+        else:
+            return op1 ** (1 / op2)
 
 
 
