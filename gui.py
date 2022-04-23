@@ -498,7 +498,7 @@ def show_help():
 
 text_box = Text(
     canvas,
-    he  ight=3,
+    height=3,
     width=27,
     background='#DDDBDB',
     relief=FLAT
