@@ -11,7 +11,7 @@ import math
 #f2, neg?
 
 ##
-# @file gui
+# @file gui.py
 # @brief graphical user interface
 #
 # @author Marek Buch (xbuchm02)
