@@ -11,6 +11,16 @@ import math
 #f2, neg?
 
 
+##
+# @file gui.py
+# @brief graphical user interface
+#
+# @author Marek Buch (xbuchm02)
+# @author David Jokay (xjokay00)
+# @author Matus Snopek (snope04)
+# @author Jan Spacek (xspace39)
+#
+
 window = Tk()
 window.title("The Compact Calculator")
 #window.geometry("200x150")
