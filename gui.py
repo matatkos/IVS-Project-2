@@ -23,8 +23,6 @@ import math
 # @author Matus Snopek (xsnope04)
 # @author Jan Spacek (xspace39)
 #
-# @todo delete vulgar comments
-# @todo eval cant calcualte with .064 for example, needs to be fixed
 #
 
 window = Tk()

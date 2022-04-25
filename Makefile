@@ -1,5 +1,5 @@
 
-all: installer #run gui.py
+all: run# installer #run gui.py
 	chmod +x gui.py
 
 

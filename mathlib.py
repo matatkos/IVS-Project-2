@@ -29,7 +29,7 @@ error_message_fact = "ERROR - factorial laws were not obeyed"
 #
 # @param n number of which we calculate the factorial
 #
-# @return fact number equal to the factorial on n
+# @return number equal to the factorial on n
 #
 
 def factorial(n):
@@ -47,7 +47,7 @@ def factorial(n):
 #
 # @param n number of which we calculate sinus
 #
-# @return math.sin(n) sinus of n calculated with the help of math library
+# @return sinus of n calculated with the help of math library
 #
 
 def sin(n):
@@ -58,7 +58,7 @@ def sin(n):
 #
 # @param n number of which we calculate cosinus
 #
-# @return math.cos(n) cosinus of n calculated with the help of math library
+# @return cosinus of n calculated with the help of math library
 #
 
 def cos(n):
