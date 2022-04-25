@@ -92,7 +92,7 @@ def clear():
 
 
 
-#function calculates the result of an expression stored in buffer
+#function  calculates the result of an expression stored in buffer
 def calculate():
     global buffer
     global buffer_numbers
