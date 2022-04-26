@@ -56,6 +56,7 @@ class flag:
     expct_operation = False
     operation_set = False
     comma = False
+    division = False
 
     ##
     # @brief creating flags object
@@ -75,6 +76,7 @@ def reset_flags():
     flags.expct_operation = False
     flags.operation_set = False
     flags.comma = False
+    flags.division =False
     return
 
     ##
@@ -200,6 +202,14 @@ def equal():
     #is operation is set, equal() cannot happen
     if flags.operation_set:
         return
+    #if division flag is true
+    if flags.division:
+        print(buffer)
+        if buffer[-1] == 0:
+            buffer = []
+            reset_flags()
+            clear_tb()
+            return
 
     #storing buffer_numbers into main buffer
     buffer_numbers_store()
@@ -320,6 +330,11 @@ def ops(symbol):
     if symbol == "s":
         symbol = "**"
         flags.is_root = True
+    # when we divide, we must make sure that we do not divide be zero
+    if symbol == "/":
+        flags.division = True
+    else:
+        flags.division = False
 
     #in case 2 or more operations in a row are given, the last one overwrites the previous one
     if flags.operation_set:
@@ -389,6 +404,12 @@ def othr_functions(symbol):
 
 def send(symbol):
     #SWITCH
+    buffer_numbers_store()
+    if flags.division:
+        if buffer[-1] == 0:
+            reset_flags()
+            clear_tb()
+            return
     #given symbol is a number(operand)
     if type(symbol) in (int, float):
         is_number(symbol)
@@ -501,7 +522,11 @@ def show_help():
     top.title("HELP")
     message='''
     SYNTAX:
-        ROOT: x root n -> nth root of a number x i.e. 4 root 2 = 2'''
+        ROOT: x root n -> nth root of a number x i.e. 4 root 2 = 2
+        POWER: todo
+        SIN:
+        COS:
+        '''
     text = Text(top, height=50, width=250)
     text.grid(row=0, column=0)
     text.insert('1.0', message)
@@ -528,8 +553,8 @@ button_sin.grid(row = 1, column = 0)
 button_cos = Button(canvas, text = "cos", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2, command = lambda: send(str("cos")))
 button_cos.grid(row = 1, column = 1)
 
-button_f12 = Button(canvas, text = "f2", height = 2, width = 3, relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2)
-button_f12.grid(row = 1, column = 2)
+button_f12 = Button(canvas, text = "abs", height = 2, width = 3, relief=FLAT,bd=2, activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2)
+button_f12.grid(row = 1, column = 2)#todo add this function
 
 button_clear = Button(canvas, text = "C", height = 2, width = 3, relief=FLAT,bd=2,activebackground='#292929',activeforeground="#ffa31a", fg='#292929', bg='#ffa31a',highlightbackground="#ffa31a", highlightthickness=2, command = lambda: clear())
 button_clear.grid(row = 1, column = 3)
