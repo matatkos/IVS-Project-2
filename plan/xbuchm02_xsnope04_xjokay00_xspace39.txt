@@ -1,6 +1,7 @@
 IVS-Project-2 
 nazov teamu: Slovenski suhaji
 prostredie: Ubuntu 64bit
+licence: GNU GPL 3
 (xsnope04, xspace39, xbuchm02, xjokay00)
 
 DEADLINES
