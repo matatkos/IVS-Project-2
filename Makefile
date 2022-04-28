@@ -3,9 +3,9 @@ all: initialization run
 	chmod +x gui.py
 
 initialization:
-	sudo apt-get install python3-pip
-	pip3 install -r requirements.txt
-	pip3 freeze
+	sudo apt-get install python-tk
+	sudo apt-get install python3-pytest
+	sudo apt-get install doxygen
 
 pack: doc clean
 	mkdir ../../doc
