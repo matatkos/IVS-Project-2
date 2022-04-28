@@ -1,4 +1,4 @@
-.PHONY: all initialization pack clean test doc run install
+.PHONY: all initialization pack clean test doc profile run install
 all: initialization run
 	chmod +x gui.py
 
@@ -22,6 +22,8 @@ clean:
 	rm -rf ../installer/usr
 	rm -rf ../../xbuchm02_xsnope04_xjokay00_xspace39/
 
+profile:
+	python3 profiling.py <../profiling/test100.txt
 run:
 	python3 gui.py
 doc:

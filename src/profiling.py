@@ -10,8 +10,8 @@ arr = sys.stdin.read().split()
 suma_x = 0
 N = int(len(arr))
 for i in range(N):
-    arr[i] = int(arr[i])
-    suma_x = int(mt.add(suma_x, arr[i]))
+    arr[i] = float(arr[i])
+    suma_x = float(mt.add(suma_x, arr[i]))
 
 
 X_avg = suma_x / N
@@ -22,7 +22,7 @@ calc2 = mt.div(1, calc1)
 
 #N * (X_avg**2)
 calc3 = mt.pow(X_avg,2)
-calc4 = int(mt.mul(N,calc3))
+calc4 = float(mt.mul(N,calc3))
 
 #suma_x ** 2
 calc5 = mt.pow(suma_x,2)
