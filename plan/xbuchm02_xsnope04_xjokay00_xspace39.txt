@@ -2,7 +2,7 @@ IVS-Project-2
 (xsnope04, xspace39, xbuchm02, xjokay00)
 
 DEADLINES
-part 17.3. = plĂĄn
+part 17.3. = plan
 part 28.4. = hotovy produkt
 part 6.5. = instalacia
 part 20.5. = problemy
@@ -10,7 +10,7 @@ part 23.5. = obhajoba
 
 TERMINY MEETINGOV(kazdy vikend)
 
-10.3. ĂvodnĂĄ schĂ´dzka -Dohadovanie funkcii, rozdelenie uloh, vyber programovacieho jazyka, naplanovany postup
+10.3. uvodna schodzka -Dohadovanie funkcii, rozdelenie uloh, vyber programovacieho jazyka, naplanovany postup
 
 CUSTOM DEADLINES 
 26.3. kostra
@@ -25,10 +25,10 @@ GUI: Tkinter library
 ROLES:
 Vsetci -kostra, GUI
 
-MatĂşĹĄ Snopek xsnope04 -faktorialy, dokumentacia
+Matus Snopek xsnope04 -faktorialy, dokumentacia
 
-JĂĄn Ĺ paÄek xspace39 -mocniny, makefile
+Jan Speck xspace39 -mocniny, makefile
 
 Marek Buch xbuchm02 -odmocnenie, basic operacie(+, -, /, *)
 
-DĂĄvid JĂłkay xjokay00 (ĹĄĂŠfko) -sinus, cosinus, testy
+David Jokay xjokay00 (veduci) -sinus, cosinus, testy
