@@ -1,0 +1,4 @@
+xbuchm02 100 (zaklad, GUI, dokumentace)	
+xsnope04 100 (zaklad, GUI, testy)
+xjokay00 100 (zaklad, GUI, profiling, matlib)
+xspace39 100 (zaklad, GUI, Makefile, instalator)
