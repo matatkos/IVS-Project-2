@@ -1,4 +1,6 @@
 IVS-Project-2 
+nazov teamu: Slovenski suhaji
+prostredie: Ubuntu 64bit
 (xsnope04, xspace39, xbuchm02, xjokay00)
 
 DEADLINES
